@@ -10,12 +10,13 @@
 library(tidyverse)
 
 # Para visualizacion
+library(grid)
 library(gridExtra)
+library(ggridges)
+library(scales)
+library(RColorBrewer)
 library(ggthemes)
 library(viridis)
-
-
-
 
 ########## Lectura ############
 
@@ -80,10 +81,11 @@ suicidios_por_edad$age <- factor(suicidios_por_edad$age,
 p1= ggplot(suicidios_mundial, aes(x = year, y = suicides_per_100k)) + 
   geom_line(col = "darkgoldenrod1 ", size = 1) + 
   geom_point(col = "darkgoldenrod1", size = 2) + 
-  labs(title = "Evolución suicidios por 100 k",
-       subtitle = "Periodo 1985 - 2015.",
-       x = "Año", 
-       y = "Suicidos por 100k") + 
+  scale_fill_viridis(discrete=TRUE) +
+  theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
+  guides(fill=F,xlab=F)+
+  ggtitle("Suicidios globales por Años")+
+  labs(y = "Suicidios por 100k") + 
   scale_x_continuous(breaks = seq(1985, 2015, 2)) + 
   scale_y_continuous(breaks = seq(10, 20))
 
@@ -93,25 +95,24 @@ p2= ggplot(suicidios_continente, aes(x = year, y = suicides_per_100k, col= facto
   facet_grid(continent ~ ., scales = "free_y") + 
   geom_line() + 
   geom_point() + 
-  labs(title = "Evolución por continente",
-       x = "Año", 
-       y = "Suicidos por 100k") +
-theme(legend.position = "none", title = element_text(size = 10)) + 
- scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F) 
+  scale_fill_viridis(discrete=TRUE) +
+  theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
+  guides(fill=F,xlab=F)+
+  ggtitle("Evolución por Continentes")+
+  labs(y = "Suicidios por 100k") +
+  theme(legend.position = "none", title = element_text(size = 10)) + 
+  scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F) 
   
-
 
 
 p3= ggplot(suicidios_por_edad, aes(x= age, y= suicide_per_100k, fill= age )) +
   geom_col()+
-  theme_fivethirtyeight()+
   scale_fill_viridis(discrete=TRUE) +
   theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
   guides(fill=F,xlab=F)+
-  ggtitle("Suicidios globales por Edad")+
-  labs(x = "Edad", 
-       y = "Suicidos por 100k") +
-theme(legend.position = "none") +
+  ggtitle("Total de Suicidios por edades")+
+  labs(y = "Suicidios por 100k") +
+  theme(legend.position = "none") +
   scale_y_continuous(breaks = seq(0,30,1), minor_breaks = F )
 
 
@@ -119,19 +120,21 @@ grid.arrange(p1,arrangeGrob(p2,p3, ncol=2),  ncol=1 )
 
 
 
-#pero como va cambiando la tendencia de la edad?
+#pero como va ido cambiando la tendencia de acuerdo a la edad?
 evolucion_por_edad = dt %>%
-  group_by(year, age)%>%
-  summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
-  ggplot(aes(x = year, y = suicide_per_100k, col = age)) + 
-    facet_grid(age ~ ., scales = "free_y") + 
-    geom_line() + 
-    geom_point() + 
-    labs(title = "Tendencia por edad",
-         x = "Año", 
-         y = "Suicidos por 100k") +
-    theme(legend.position = "none", title = element_text(size = 10)) + 
-    scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F) 
+                    group_by(year, age)%>%
+                    summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
+                    ggplot(aes(x = year, y = suicide_per_100k, col = age)) + 
+                    facet_grid(age ~ ., scales = "free_y") + 
+                    geom_line() + 
+                    geom_point() + 
+                    scale_fill_viridis(discrete=TRUE) +
+                    theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
+                    guides(fill=F,xlab=F)+
+                    ggtitle("Evolución por edades")+
+                    labs(y = "Suicidios por 100k") +
+                    theme(legend.position = "none", title = element_text(size = 10)) + 
+                    scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F) 
 
 grid.arrange(p3, evolucion_por_edad, ncol = 2)
 

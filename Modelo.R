@@ -20,16 +20,15 @@ summary(modelo_fin)
 ggplot(mod_sin_outliers, aes(x = meanGDP, y = suicidios_por_100k, col = factor(continent))) + 
   geom_point() + 
   geom_smooth(method = "lm", aes(group = 1)) + 
-  theme_fivethirtyeight()+
   scale_fill_viridis(discrete=TRUE) +
   theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
   guides(fill=F,xlab=F)+
-  ggtitle("Ajuste del Modelo: GDP(per capita) vs. Suicidios(por 100k) ")+
-  labs(x = "GDP(per capita)", 
-       y = "Suicidios por 100k") +
+  ggtitle("Modelo GDP(per capita) vs. Suicidios ")+
+  labs( y = "Suicidios por 100k") +
   scale_x_continuous(labels=scales::dollar_format(prefix="$"), breaks = seq(0, 70000, 10000))+
   theme(legend.position = "none")
   
+
   
 ########## Conlusiones  ############
 

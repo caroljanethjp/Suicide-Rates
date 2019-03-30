@@ -29,16 +29,13 @@ media_gdp_pais= dt %>%
 
 ggplot(media_gdp_pais, aes(x= meanGDP, y= suicidios_por_100k, col= factor(continent))) + 
 geom_point()+
-theme_fivethirtyeight()+
 scale_fill_viridis(discrete=TRUE) +
 theme(axis.text.x  = element_text(angle=45, hjust=1, vjust=0.9),axis.title.x = element_blank())+
 guides(fill=F,xlab=F)+
-ggtitle("Relación entre GDP(per capita) y Suicidios por 100k ")+
-labs(x = "GDP(per capita)", 
-     y = "Suicidios por 100k",
+ggtitle("Relación entre Suicidios y GDP(per capita)")+
+labs(y = "Suicidios por 100k",
      col = "Continent") +
 scale_x_continuous(labels=scales::dollar_format(prefix="$"), breaks = seq(0, 70000, 10000))
-
 
 
 
