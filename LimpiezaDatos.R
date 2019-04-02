@@ -25,7 +25,9 @@ str(dt)
 ########## Limpieza de datos ##############
 
 #El 70% de HDI son valores faltantes, por eso se elimina del análisis
+#round(colSums(100*(is.na(dt)/nrow(dt))),2)
 # sum(is.na(dt$`HDI for year`))
+
 dt <- dt %>% 
   select(-c(`HDI for year`, `suicides/100k pop`)) 
 

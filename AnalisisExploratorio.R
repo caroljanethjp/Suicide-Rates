@@ -139,3 +139,6 @@ evolucion_por_edad = dt %>%
 grid.arrange(p3, evolucion_por_edad, ncol = 2)
 
 
+
+
+
